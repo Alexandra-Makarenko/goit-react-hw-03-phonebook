@@ -16,6 +16,27 @@ export class App extends Component  {
   ],
   filter: ''
 }
+componentDidMount() {
+  // console.log('App componentDidMount');
+
+  const contacts = localStorage.getItem('contacts');
+  const parsedContacts = JSON.parse(contacts);
+
+  if (parsedContacts) {
+    this.setState({ contacts: parsedContacts });
+  }
+}
+componentDidUpdate(prevProps, prevState) {
+
+  const nextContacts = this.state.contacts;
+  const prevContacts = prevState.contacts;
+
+  if (nextContacts !== prevContacts) {
+    localStorage.setItem('contacts', JSON.stringify(nextContacts));
+  }
+
+}
+
   formSubmitHandler = data => {  
     this.state.contacts.map(contact=> contact.name.toLowerCase()).includes(data.name.toLowerCase())? (alert(`${data.name} is already in contacts`)) : (this.setState((prevState) => { return { contacts: [...prevState.contacts, ...[data]] } }))
   }
